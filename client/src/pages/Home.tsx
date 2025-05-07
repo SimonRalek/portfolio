@@ -5,7 +5,6 @@ import HomeSection from "@/components/HomeSection";
 import AboutSection from "@/components/AboutSection";
 import ResumeSection from "@/components/ResumeSection";
 import ProjectsSection from "@/components/ProjectsSection";
-import ContactSection from "@/components/ContactSection";
 import ScrollToTop from "@/components/ScrollToTop";
 import { Helmet } from "react-helmet";
 
@@ -53,7 +52,6 @@ export default function Home() {
         <AboutSection />
         <ResumeSection />
         <ProjectsSection />
-        <ContactSection />
       </main>
       
       <Footer />
