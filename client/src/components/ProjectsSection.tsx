@@ -84,8 +84,12 @@ export default function ProjectsSection() {
   return (
     <AnimatedSection 
       id="projects" 
-      className="py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900"
+      className="py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 bg-dot-pattern relative"
     >
+      {/* Background gradient circles */}
+      <div className="gradient-blur-circle top-[20%] left-[5%]"></div>
+      <div className="gradient-blur-circle bottom-[10%] right-[5%]"></div>
+      <div className="gradient-blur-circle top-[60%] left-[35%]"></div>
       <div className="container mx-auto px-6">
         <motion.div 
           className="text-center mb-16"
