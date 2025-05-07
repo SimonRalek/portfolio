@@ -83,7 +83,7 @@ export class DatabaseStorage implements IStorage {
     return info;
   }
   
-  async updatePersonalInfo(info: InsertPersonalInfo): Promise<PersonalInfo> {
+  async updatePersonalInfo(info: Omit<InsertPersonalInfo, 'social'> & { social: { github?: string; linkedin?: string; twitter?: string; instagram?: string; } }): Promise<PersonalInfo> {
     // Get current info
     const currentInfo = await this.getPersonalInfo();
     
@@ -91,14 +91,32 @@ export class DatabaseStorage implements IStorage {
     if (currentInfo) {
       const [updated] = await db
         .update(personalInfo)
-        .set(info)
+        .set({
+          name: info.name,
+          title: info.title,
+          description: info.description,
+          email: info.email,
+          location: info.location,
+          phone: info.phone,
+          avatar: info.avatar,
+          social: info.social
+        })
         .where(eq(personalInfo.id, currentInfo.id))
         .returning();
       return updated;
     } else {
       const [created] = await db
         .insert(personalInfo)
-        .values(info)
+        .values({
+          name: info.name,
+          title: info.title,
+          description: info.description,
+          email: info.email,
+          location: info.location,
+          phone: info.phone,
+          avatar: info.avatar,
+          social: info.social
+        })
         .returning();
       return created;
     }
