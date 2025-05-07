@@ -71,7 +71,7 @@ export default function PersonalInfoForm() {
 
   // Update form values when data is loaded
   useState(() => {
-    if (data) {
+    if (data && Object.keys(data).length > 0) {
       form.reset({
         name: data.name || "",
         title: data.title || "",

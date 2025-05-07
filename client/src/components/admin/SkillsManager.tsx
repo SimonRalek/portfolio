@@ -89,7 +89,7 @@ export default function SkillsManager() {
     category: "technical",
     icon: "",
     proficiency: 75,
-    ordinal: skills.length,
+    ordinal: Array.isArray(skills) ? skills.length : 0,
   };
 
   const form = useForm<SkillValues>({
@@ -110,7 +110,7 @@ export default function SkillsManager() {
     } else {
       form.reset({
         ...defaultValues,
-        ordinal: skills.length,
+        ordinal: Array.isArray(skills) ? skills.length : 0,
       });
     }
   };
@@ -246,7 +246,7 @@ export default function SkillsManager() {
           </Select>
           
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            {skills.length} skills found
+            {Array.isArray(skills) ? skills.length : 0} skills found
           </p>
         </div>
         
@@ -255,7 +255,7 @@ export default function SkillsManager() {
         </Button>
       </div>
 
-      {skills.length === 0 ? (
+      {!Array.isArray(skills) || skills.length === 0 ? (
         <div className="text-center py-10 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
           <p className="text-gray-500 dark:text-gray-400">
             No skills found. Add your first skill to get started.
