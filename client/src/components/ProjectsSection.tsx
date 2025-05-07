@@ -1,13 +1,27 @@
-import { motion } from "framer-motion";
+import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { projects } from "@/data/portfolio-data";
-import { ExternalLink, Github, Code, MonitorSmartphone, ChevronRight, Sparkles } from "lucide-react";
+import { 
+  ExternalLink, 
+  Github, 
+  Code, 
+  MonitorSmartphone, 
+  ChevronRight, 
+  Sparkles, 
+  Star, 
+  Calendar, 
+  Layers, 
+  Info
+} from "lucide-react";
 import { fadeInUp, staggerContainer, cardVariants } from "@/lib/framer-animations";
 import AnimatedSection from "./AnimatedSection";
+import { useState } from "react";
 
 export default function ProjectsSection() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
   const cardVariants = {
     hidden: { y: 50, opacity: 0 },
     visible: (i: number) => ({
@@ -53,6 +67,18 @@ export default function ProjectsSection() {
         ease: "easeInOut"
       } 
     }
+  };
+  
+  const badgeVariants = {
+    initial: { opacity: 0, scale: 0.8 },
+    animate: (i: number) => ({ 
+      opacity: 1, 
+      scale: 1,
+      transition: { 
+        delay: i * 0.05, 
+        duration: 0.3 
+      } 
+    })
   };
 
   return (
@@ -101,83 +127,150 @@ export default function ProjectsSection() {
         </motion.div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-10">
-          {projects.map((project, index) => (
-            <motion.div
-              key={index}
-              custom={index}
-              variants={cardVariants}
-              initial="hidden"
-              whileInView="visible"
-              whileHover="hover"
-              viewport={{ once: true, amount: 0.1 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700 flex flex-col h-full transform-gpu"
-            >
-              <div className="relative overflow-hidden h-48">
-                <motion.img 
-                  src={project.image} 
-                  alt={project.title} 
-                  className="w-full h-full object-cover"
-                  variants={imageVariants}
-                  initial="hidden"
-                  whileHover="hover"
-                  transition={{ duration: 0.4 }}
+          {projects.map((project, index) => {
+            // Pre-initialize motion values outside the render loop
+            // to avoid React hooks rules violation
+            const mouseX = useMotionValue(0);
+            const mouseY = useMotionValue(0);
+            
+            // Function to handle mouse movement for the glow effect
+            function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
+              const { left, top } = currentTarget.getBoundingClientRect();
+              mouseX.set(clientX - left);
+              mouseY.set(clientY - top);
+            }
+            
+            return (
+              <motion.div
+                key={index}
+                custom={index}
+                variants={cardVariants}
+                initial="hidden"
+                whileInView="visible"
+                whileHover="hover"
+                viewport={{ once: true, amount: 0.1 }}
+                className="group bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700 flex flex-col h-full transform-gpu relative"
+                onMouseMove={handleMouseMove}
+                onMouseEnter={() => setActiveIndex(index)}
+                onMouseLeave={() => setActiveIndex(null)}
+              >
+                <motion.div 
+                  className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl opacity-0 group-hover:opacity-100 blur-sm transition duration-300"
+                  style={{
+                    background: useMotionTemplate`
+                      radial-gradient(
+                        650px circle at ${mouseX}px ${mouseY}px,
+                        rgba(59, 130, 246, 0.15),
+                        transparent
+                      )
+                    `,
+                  }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-70" />
-                <div className="absolute bottom-3 left-4 flex gap-2">
-                  {project.technologies.slice(0, 2).map((tech) => (
-                    <Badge 
-                      key={tech} 
-                      className="bg-white/90 hover:bg-white text-gray-800 text-xs font-medium transition-colors"
-                    >
-                      {tech}
-                    </Badge>
-                  ))}
-                  {project.technologies.length > 2 && (
-                    <Badge 
-                      className="bg-white/90 hover:bg-white text-gray-800 text-xs font-medium transition-colors"
-                    >
-                      +{project.technologies.length - 2}
-                    </Badge>
-                  )}
-                </div>
-              </div>
-              
-              <div className="p-6 flex-1 flex flex-col">
-                <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                  {project.title}
-                </h3>
                 
-                <p className="text-gray-600 dark:text-gray-300 mb-6 flex-grow">
-                  {project.description}
-                </p>
-                
-                <div className="flex space-x-3 mt-auto">
-                  <motion.a 
-                    href={project.github} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center py-2 px-3 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white rounded-lg font-medium text-sm transition-colors"
+                <div className="relative overflow-hidden h-52">
+                  <motion.img 
+                    src={project.image} 
+                    alt={project.title} 
+                    className="w-full h-full object-cover"
+                    variants={imageVariants}
+                    initial="hidden"
                     whileHover="hover"
-                    variants={buttonVariants}
+                    transition={{ duration: 0.4 }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-70" />
+                  
+                  {/* Project tags */}
+                  <motion.div 
+                    className="absolute top-3 right-3"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ delay: 0.3 }}
                   >
-                    <Github className="mr-2 h-4 w-4" /> 
-                    Code
-                  </motion.a>
-                  <motion.a 
-                    href={project.demo} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center py-2 px-3 bg-blue-100 hover:bg-blue-200 dark:bg-blue-900/40 dark:hover:bg-blue-800/60 text-blue-700 dark:text-blue-300 rounded-lg font-medium text-sm transition-colors"
-                    whileHover="hover"
-                    variants={buttonVariants}
-                  >
-                    <ExternalLink className="mr-2 h-4 w-4" /> 
-                    Demo
-                  </motion.a>
+                    <div className="flex items-center gap-2 bg-blue-600/80 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-full">
+                      <Star className="w-3 h-3" />
+                      <span>Featured</span>
+                    </div>
+                  </motion.div>
+                  
+                  {/* Technology badges */}
+                  <div className="absolute bottom-3 left-4 flex flex-wrap gap-2 max-w-[90%]">
+                    {project.technologies.map((tech, techIndex) => (
+                      <motion.div
+                        key={tech}
+                        custom={techIndex}
+                        variants={badgeVariants}
+                        initial="initial"
+                        animate={activeIndex === index ? "animate" : "initial"}
+                      >
+                        <Badge 
+                          className="bg-white/90 hover:bg-white text-gray-800 text-xs font-medium transition-colors"
+                        >
+                          {tech}
+                        </Badge>
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+                
+                <div className="relative p-6 flex-1 flex flex-col z-10">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-xl font-bold text-gray-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                      {project.title}
+                    </h3>
+                    
+                    <motion.div 
+                      className="bg-blue-100 dark:bg-blue-900/30 p-1.5 rounded-full"
+                      whileHover={{ rotate: 15, scale: 1.1 }}
+                    >
+                      <Info className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    </motion.div>
+                  </div>
+                  
+                  <p className="text-gray-600 dark:text-gray-300 mb-6 flex-grow">
+                    {project.description}
+                  </p>
+                  
+                  <div className="mt-auto space-y-5">
+                    <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 border-t border-gray-100 dark:border-gray-700 pt-4">
+                      <div className="flex items-center gap-1.5">
+                        <Layers className="w-4 h-4 text-blue-500" />
+                        <span>{project.technologies.length} Technologies</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <Calendar className="w-4 h-4 text-blue-500" />
+                        <span>2023</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex space-x-3">
+                      <motion.a 
+                        href={project.github} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex-1 flex items-center justify-center py-2.5 px-3 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white rounded-lg font-medium text-sm transition-colors"
+                        whileHover="hover"
+                        variants={buttonVariants}
+                      >
+                        <Github className="mr-2 h-4 w-4" /> 
+                        Code
+                      </motion.a>
+                      <motion.a 
+                        href={project.demo} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex-1 flex items-center justify-center py-2.5 px-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg font-medium text-sm transition-colors"
+                        whileHover="hover"
+                        variants={buttonVariants}
+                      >
+                        <ExternalLink className="mr-2 h-4 w-4" /> 
+                        Demo
+                      </motion.a>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
         
         <motion.div

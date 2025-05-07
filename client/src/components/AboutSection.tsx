@@ -5,7 +5,27 @@ import { fadeInUp, staggerContainer, skillTagVariants } from "@/lib/framer-anima
 import AnimatedSection from "./AnimatedSection";
 import { FaUsers, FaComments, FaTasks, FaLightbulb, FaClock, FaBrain } from "react-icons/fa";
 import { FiExternalLink } from "react-icons/fi";
-import { Sparkles, Code, ArrowRight } from "lucide-react";
+import { 
+  Sparkles, 
+  Code, 
+  ArrowRight, 
+  Database, 
+  Cloud, 
+  Box, 
+  FileJson, 
+  Network
+} from "lucide-react";
+import { 
+  SiJavascript, 
+  SiReact, 
+  SiNodedotjs, 
+  SiPython, 
+  SiTypescript, 
+  SiGraphql, 
+  SiMongodb, 
+  SiDocker, 
+  SiAmazon
+} from "react-icons/si";
 
 // Map for soft skill icons
 const skillIconMap: Record<string, React.ReactNode> = {
@@ -17,12 +37,28 @@ const skillIconMap: Record<string, React.ReactNode> = {
   brain: <FaBrain />
 };
 
+// Map for technical skill icons
+const techIconMap: Record<string, React.ReactNode> = {
+  javascript: <SiJavascript className="text-yellow-400" />,
+  react: <SiReact className="text-blue-400" />,
+  nodejs: <SiNodedotjs className="text-green-600" />,
+  python: <SiPython className="text-blue-500" />,
+  database: <Database className="text-purple-500" />,
+  cloud: <Cloud className="text-orange-500" />,
+  container: <SiDocker className="text-blue-500" />,
+  api: <SiGraphql className="text-pink-600" />,
+  typescript: <SiTypescript className="text-blue-600" />
+};
+
 export default function AboutSection() {
   return (
     <AnimatedSection 
       id="about" 
-      className="py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900"
+      className="py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 bg-gradient-blue relative"
     >
+      {/* Background gradient circles */}
+      <div className="gradient-blur-circle top-[5%] right-[10%]"></div>
+      <div className="gradient-blur-circle bottom-[15%] left-[5%]"></div>
       <div className="container mx-auto px-6">
         <div className="max-w-5xl mx-auto">
           <motion.h2 
@@ -135,32 +171,27 @@ export default function AboutSection() {
             }}
           >
             <h3 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">Technical Skills</h3>
-            <motion.div 
-              className="flex flex-wrap justify-center gap-3"
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-            >
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-5 mt-8">
               {technicalSkills.map((skill, index) => (
-                <motion.span
-                  key={skill}
-                  className="px-5 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/40 dark:to-indigo-900/40 text-blue-800 dark:text-blue-200 rounded-full font-medium text-sm border border-blue-100 dark:border-blue-800"
-                  variants={skillTagVariants}
-                  whileHover={{
-                    scale: 1.05, 
-                    boxShadow: "0 4px 12px rgba(59, 130, 246, 0.2)",
-                    background: "linear-gradient(to right, rgba(59, 130, 246, 0.1), rgba(99, 102, 241, 0.1))",
-                  }}
+                <motion.div
+                  key={skill.name}
+                  className="flex flex-col items-center justify-center p-5 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 border border-blue-100 dark:border-blue-800 group"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.05 * index, duration: 0.3 }}
+                  transition={{ delay: 0.05 * index, duration: 0.4 }}
                   viewport={{ once: true }}
+                  whileHover={{ 
+                    scale: 1.05, 
+                    boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.15)",
+                  }}
                 >
-                  {skill}
-                </motion.span>
+                  <div className="text-3xl mb-3 transition-transform duration-300 group-hover:scale-110 group-hover:transform">
+                    {techIconMap[skill.icon]}
+                  </div>
+                  <span className="font-medium text-gray-800 dark:text-white text-center">{skill.name}</span>
+                </motion.div>
               ))}
-            </motion.div>
+            </div>
           </motion.div>
           
           <motion.div 

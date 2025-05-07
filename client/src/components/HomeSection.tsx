@@ -87,14 +87,43 @@ export default function HomeSection() {
 
   // Background floating elements
   const backgroundElements = [
-    { icon: <Code className="text-blue-500/30 dark:text-blue-400/20" />, size: "w-12 h-12", position: "top-1/4 left-1/4" },
-    { icon: <Sparkles className="text-indigo-500/30 dark:text-indigo-400/20" />, size: "w-10 h-10", position: "top-1/3 right-1/4" },
-    { icon: <Github className="text-gray-400/20 dark:text-gray-400/10" />, size: "w-16 h-16", position: "bottom-1/4 left-1/5" },
-    { icon: <ExternalLink className="text-purple-500/20 dark:text-purple-400/10" />, size: "w-8 h-8", position: "bottom-1/3 right-1/5" },
+    { icon: <Code className="text-blue-500/30 dark:text-blue-400/20" />, size: "w-12 h-12", position: "top-1/4 left-1/4", animationDuration: 2 },
+    { icon: <Sparkles className="text-indigo-500/30 dark:text-indigo-400/20" />, size: "w-10 h-10", position: "top-1/3 right-1/4", animationDuration: 2.5 },
+    { icon: <Github className="text-gray-400/20 dark:text-gray-400/10" />, size: "w-16 h-16", position: "bottom-1/4 left-1/5", animationDuration: 3 },
+    { icon: <ExternalLink className="text-purple-500/20 dark:text-purple-400/10" />, size: "w-8 h-8", position: "bottom-1/3 right-1/5", animationDuration: 2.8 },
+    { icon: <Code className="text-blue-400/20 dark:text-blue-300/15" />, size: "w-10 h-10", position: "top-1/5 right-1/3", animationDuration: 2.2 },
+    { icon: <Sparkles className="text-indigo-400/20 dark:text-indigo-300/15" />, size: "w-8 h-8", position: "bottom-1/3 left-1/3", animationDuration: 2.7 },
+    { icon: <Download className="text-green-400/20 dark:text-green-300/15" />, size: "w-9 h-9", position: "top-2/5 left-1/2", animationDuration: 3.2 },
+    { icon: <ArrowDown className="text-amber-400/20 dark:text-amber-300/15" />, size: "w-7 h-7", position: "bottom-1/5 right-1/3", animationDuration: 2.4 },
+    // Add abstract shapes using SVG paths
+    { 
+      icon: (
+        <svg viewBox="0 0 24 24" className="text-rose-400/20 dark:text-rose-300/15" fill="currentColor">
+          <circle cx="12" cy="12" r="8" />
+        </svg>
+      ), 
+      size: "w-14 h-14", 
+      position: "top-2/3 left-3/5", 
+      animationDuration: 3.5 
+    },
+    { 
+      icon: (
+        <svg viewBox="0 0 24 24" className="text-teal-400/20 dark:text-teal-300/15" fill="currentColor">
+          <rect x="4" y="4" width="16" height="16" rx="2" />
+        </svg>
+      ), 
+      size: "w-11 h-11", 
+      position: "bottom-3/5 right-2/5", 
+      animationDuration: 2.9 
+    },
   ];
 
   return (
-    <section id="home" className="min-h-screen relative overflow-hidden flex items-center py-12 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+    <section id="home" className="min-h-screen relative overflow-hidden flex items-center py-12 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 bg-dot-pattern">
+      {/* Background gradient circles */}
+      <div className="gradient-blur-circle top-[10%] left-[15%]"></div>
+      <div className="gradient-blur-circle bottom-[20%] right-[10%]"></div>
+      <div className="gradient-blur-circle top-[40%] right-[25%]"></div>
       {/* Floating background elements */}
       {backgroundElements.map((item, i) => (
         <motion.div
@@ -106,7 +135,7 @@ export default function HomeSection() {
               y: [0, -10, 0],
               transition: {
                 delay: i * 0.2,
-                duration: 2,
+                duration: item.animationDuration,
                 ease: "easeInOut",
                 repeat: Infinity,
                 repeatType: "loop" as const

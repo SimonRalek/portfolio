@@ -20,16 +20,16 @@ export const personalInfo = {
 
 // Skills
 export const technicalSkills = [
-  "JavaScript",
-  "React",
-  "Node.js",
-  "Python",
-  "SQL",
-  "MongoDB",
-  "AWS",
-  "Docker",
-  "GraphQL",
-  "TypeScript"
+  { name: "JavaScript", icon: "javascript" },
+  { name: "React", icon: "react" },
+  { name: "Node.js", icon: "nodejs" },
+  { name: "Python", icon: "python" },
+  { name: "SQL", icon: "database" },
+  { name: "MongoDB", icon: "database" },
+  { name: "AWS", icon: "cloud" },
+  { name: "Docker", icon: "container" },
+  { name: "GraphQL", icon: "api" },
+  { name: "TypeScript", icon: "typescript" }
 ];
 
 export const softSkills = [
